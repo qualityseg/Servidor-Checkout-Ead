@@ -23,9 +23,6 @@ app.prepare().then(() => {
     console.log('Recebendo solicitação na rota /api/checkout');
     const { courses } = req.body;
 
-  
-    
-  
     // Calcular o valor total dos cursos selecionados
     const data = fs.readFileSync(path.join(__dirname, 'cursos.json'), 'utf8');
     const cursos = JSON.parse(data);
@@ -37,9 +34,9 @@ app.prepare().then(() => {
         console.log(total); // Adicionado aqui
       }
     }
-  
+
     console.log('Valor total dos cursos selecionados:', total);
-  
+
     const preference = {
       items: [
         {
@@ -49,9 +46,9 @@ app.prepare().then(() => {
         },
       ],
     };
-  
+
     console.log(preference);
-  
+
     try {
       console.log('Criando preferência de pagamento com o Mercado Pago');
       const response = await mercadopago.preferences.create(preference);
@@ -73,15 +70,14 @@ app.prepare().then(() => {
     }
   });
 
-
   server.all('*', (req, res) => {
     return handle(req, res);
   });
-  
+
   server.use((req, res, next) => {
     console.log(`Acessando a rota: ${req.method} ${req.url}`);
     next();
   });
-  
+
   module.exports = server;
 });
