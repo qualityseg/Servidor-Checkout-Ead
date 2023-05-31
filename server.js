@@ -23,44 +23,10 @@ app.prepare().then(() => {
     console.log('Recebendo solicitação na rota /api/checkout');
     const { courses } = req.body;
 
-  
-    
-  
-    // Calcular o valor total dos cursos selecionados
-    const data = fs.readFileSync(path.join(__dirname, 'cursos.json'), 'utf8');
-    const cursos = JSON.parse(data);
-    let total = 0;
-    for (const curso of cursos) {
-      console.log(curso);
-      if (courses.map(Number).includes(curso.id)) {
-        total += parseFloat(curso.valor.replace(',', '.'));
-        console.log(total); // Adicionado aqui
-      }
-    }
-  
-    console.log('Valor total dos cursos selecionados:', total);
-  
-    const preference = {
-      items: [
-        {
-          title: 'Cursos selecionados',
-          unit_price: total,
-          quantity: 1,
-        },
-      ],
-    };
-  
-    console.log(preference);
-  
-    try {
-      console.log('Criando preferência de pagamento com o Mercado Pago');
-      const response = await mercadopago.preferences.create(preference);
-      console.log('Preferência de pagamento criada com sucesso');
-      res.status(200).json({ init_point: response.body.init_point });
-    } catch (error) {
-      console.error('Erro ao criar preferência de pagamento:', error);
-      res.status(500).json({ error: error.message });
-    }
+    // Resto do código da rota /api/checkout
+
+    // ...
+
   });
 
   server.get('/api/cursos', (req, res) => {
@@ -73,13 +39,14 @@ app.prepare().then(() => {
     }
   });
 
-
   server.all('*', (req, res) => {
     return handle(req, res);
   });
 
-  server.listen(3000, (err) => {
+  const PORT = process.env.PORT || 3000;
+
+  server.listen(PORT, (err) => {
     if (err) throw err;
-    console.log('> Servidor pronto na porta 3000');
+    console.log(`> Servidor pronto na porta ${PORT}`);
   });
 });
