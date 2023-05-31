@@ -77,6 +77,11 @@ app.prepare().then(() => {
   server.all('*', (req, res) => {
     return handle(req, res);
   });
-
+  
+  server.use((req, res, next) => {
+    console.log(`Acessando a rota: ${req.method} ${req.url}`);
+    next();
+  });
+  
   module.exports = server;
 });
